@@ -2,8 +2,11 @@ const pify = require('pify')
 const ThroughStream = require('readable-stream').PassThrough
 const debounce = require('lodash.debounce')
 const endOfStream = pify(require('end-of-stream'))
+const noop = () => {}
 
 module.exports = substreamOnActive
+module.exports.createSubstream = createSubstream
+module.exports.onStreamIdle = onStreamIdle
 
 // continuously create new child streams, calling handler on active
 function substreamOnActive(parentStream, opts, handler) {
@@ -24,7 +27,7 @@ function substreamOnActive(parentStream, opts, handler) {
 }
 
 // create a new child stream, calling callback on active
-function createSubstream(parentStream, opts, onActive, onIdle) {
+function createSubstream(parentStream, opts, onActive = noop, onIdle = noop) {
   // stop flow
   parentStream.pause()
 
