@@ -3,7 +3,7 @@ const pify = require('pify')
 const ThroughStream = require('readable-stream').PassThrough
 const endOfStream = pify(require('end-of-stream'))
 const concat = require('concat-stream')
-const substreamOnActive = require('../src/index')
+const { substreamOnActive } = require('../src/index')
 const timeout = (duration) => new Promise(resolve => setTimeout(resolve, duration))
 
 const testDelay = 20
@@ -12,7 +12,7 @@ asyncTest('basic test', async (t) => {
   const substreams = []
 
   const through = new ThroughStream()
-  substreamOnActive(through, { delay: testDelay }, async (childStream) => {
+  substreamOnActive(through, { delay: testDelay }, (childStream) => {
     substreams.push(childStream)
   })
 
